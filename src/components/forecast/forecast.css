@@ -60,3 +60,15 @@
 .daily-details-grid-item label:last-child {
   color: #212121;
 }
+
+.weather-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.weather-table th,
+.weather-table td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
