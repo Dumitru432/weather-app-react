@@ -9,12 +9,22 @@ import './forecast.css';
 
 function Forecast({ data }) {
   const groupedForecast = data.list.reduce((acc, item) => {
-    const date = new Date(item.dt * 1000).toLocaleDateString();
-    console.log('Raw date:', item.dt, 'Parsed date:', date);
-    if (!acc[date]) {
-      acc[date] = [];
+    const date = new Date(item.dt * 1000);
+
+    // Specify the desired date format: 'MM/DD/YYYY'
+    const formattedDate = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(date);
+
+    console.log('Raw date:', item.dt, 'Formatted date:', formattedDate);
+
+    if (!acc[formattedDate]) {
+      acc[formattedDate] = [];
     }
-    acc[date].push(item);
+
+    acc[formattedDate].push(item);
     return acc;
   }, {});
 
@@ -49,24 +59,35 @@ function Forecast({ data }) {
 
   return (
     <>
-      <Accordion allowZeroExpanded>
+      <Accordion
+        allowZeroExpanded
+        style={{
+          marginTop: '20px',
+        }}
+      >
         {Object.keys(groupedForecast).map((date) => (
           <AccordionItem key={date}>
             <AccordionItemHeading>
               <AccordionItemButton>
-              <div className='daily-item'>
-  <label className='day'>
-    {console.log('Rendering date:', date)}
-    {new Date(date).toLocaleDateString(undefined, {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })}
-  </label>
-  <label className='description'></label>
-</div>
-
+                <div
+                  className='daily-item'
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <label className='day'>
+                    {new Date(date).toLocaleDateString(undefined, {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </label>
+                  <label className='description'></label>
+                </div>
               </AccordionItemButton>
             </AccordionItemHeading>
             <AccordionItemPanel>
